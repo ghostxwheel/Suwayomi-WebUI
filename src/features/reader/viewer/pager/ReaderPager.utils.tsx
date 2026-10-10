@@ -29,6 +29,7 @@ import { reverseString } from '@/base/utils/Strings.ts';
 import { getPage } from '@/features/reader/overlay/progress-bar/ReaderProgressBar.utils.tsx';
 import { getOptionForDirection } from '@/features/theme/services/ThemeCreator.ts';
 import { READING_DIRECTION_TO_THEME_DIRECTION } from '@/features/reader/settings/ReaderSettings.constants.tsx';
+import { VIEWPORT_HEIGHT } from '@/base/utils/Viewport.ts';
 import { coerceIn } from '@/lib/HelperFunctions.ts';
 import type { NavbarContextType } from '@/features/navigation-bar/NavigationBar.types.ts';
 import merge from 'lodash/fp/merge';
@@ -78,7 +79,7 @@ export const getImagePlaceholderStyling = (
 
     const setReaderWidth = getSetReaderWidth(readerWidth, pageScaleMode);
     const fullWidth = getMaxWidth(`${Math.min(100, setReaderWidth ?? OVER_9000)}vw`);
-    const fullHeight = `calc(100vh - ${joinOffsetsForCssCalc(heightOffset)})`;
+    const fullHeight = `calc(${VIEWPORT_HEIGHT} - ${joinOffsetsForCssCalc(heightOffset)})`;
 
     const DEFAULT_SINGLE_PAGE_WIDTH = isTabletWidth ? fullWidth : getDesktopWidth(40, setReaderWidth);
     const DEFAULT_SINGLE_PAGE_HEIGHT = isTabletWidth ? fullHeight : '85vh';
@@ -91,7 +92,7 @@ export const getImagePlaceholderStyling = (
         },
         [ReadingMode.CONTINUOUS_VERTICAL]: {
             minWidth: DEFAULT_SINGLE_PAGE_WIDTH,
-            minHeight: '100vh',
+            minHeight: VIEWPORT_HEIGHT,
         },
         [ReadingMode.CONTINUOUS_HORIZONTAL]: {
             minWidth: DEFAULT_SINGLE_PAGE_WIDTH,
@@ -99,7 +100,7 @@ export const getImagePlaceholderStyling = (
         },
         [ReadingMode.WEBTOON]: {
             minWidth: DEFAULT_SINGLE_PAGE_WIDTH,
-            minHeight: '100vh',
+            minHeight: VIEWPORT_HEIGHT,
         },
     };
     const defaultStyling = {
@@ -123,7 +124,7 @@ export const getImagePlaceholderStyling = (
                 ...applyStyles(shouldStretchPage, {
                     minHeight: fullHeight,
                     ...applyStyles(isContinuousVerticalReadingMode(readingMode), {
-                        minHeight: '100vh',
+                        minHeight: VIEWPORT_HEIGHT,
                     }),
                 }),
             };
@@ -134,7 +135,7 @@ export const getImagePlaceholderStyling = (
                     minWidth: minWidthForStretch,
                     minHeight: fullHeight,
                     ...applyStyles(isContinuousVerticalReadingMode(readingMode), {
-                        minHeight: '100vh',
+                        minHeight: VIEWPORT_HEIGHT,
                     }),
                 }),
             };
@@ -159,7 +160,7 @@ const getReaderDimensionStyling = (
     heightOffset: (number | string)[],
 ): CSSObject => {
     const fullWidth = `calc((100vw - ${joinOffsetsForCssCalc(widthOffset)}) * ${widthPercentage})`;
-    const fullHeight = `calc(100vh - ${joinOffsetsForCssCalc(heightOffset)})`;
+    const fullHeight = `calc(${VIEWPORT_HEIGHT} - ${joinOffsetsForCssCalc(heightOffset)})`;
 
     switch (pageScaleMode) {
         case ReaderPageScaleMode.WIDTH:

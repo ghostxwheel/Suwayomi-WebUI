@@ -395,3 +395,23 @@ function legacyCopyText(text) {
     }
     ServiceWorkerContainer.prototype.register = () => new Promise(() => {});
 })();
+
+// iOS 12: "100vh" is the viewport height WITHOUT the toolbars, i.e. taller than the visible area, so
+// every full-height layout (the reader above all) gets a small vertical page scroll. Publish the real
+// visible height as --viewport-height (see src/base/utils/Viewport.ts, which falls back to 100vh).
+(function () {
+    if (!IS_IOS_12) {
+        return;
+    }
+    const root = document.documentElement;
+    const update = () => {
+        const height = `${window.innerHeight  }px`;
+        if (root.style.getPropertyValue('--viewport-height') !== height) {
+            root.style.setProperty('--viewport-height', height);
+        }
+    };
+    update();
+    window.addEventListener('resize', update);
+    // innerHeight is still the old orientation's value right at the event on iOS, so re-read after layout settles
+    window.addEventListener('orientationchange', () => setTimeout(update, 300));
+})();

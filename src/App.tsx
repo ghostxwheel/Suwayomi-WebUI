@@ -34,6 +34,7 @@ import { MigrationFABIndicator } from '@/features/migration/components/Migration
 import { SplashScreen } from '@/features/authentication/components/SplashScreen.tsx';
 import { OffsetContainer } from '@/base/OffsetComponent.tsx';
 import { AppInitializer } from '@/base/AppInitializer.ts';
+import { VIEWPORT_HEIGHT } from '@/base/utils/Viewport.ts';
 
 const { Browse } = loadable(() => import('@/features/browse/screens/Browse.tsx'), lazyLoadFallback);
 const { DownloadQueue } = loadable(() => import('@/features/downloads/screens/DownloadQueue.tsx'), lazyLoadFallback);
@@ -186,7 +187,7 @@ const MainApp = () => {
             id="appMainContainer"
             component="main"
             sx={{
-                minHeight: `calc(100vh - ${appBarHeight + bottomBarHeight}px)`,
+                minHeight: `calc(${VIEWPORT_HEIGHT} - ${appBarHeight + bottomBarHeight}px)`,
                 width: `calc(100vw - (100vw - 100%) - ${navBarWidth}px)`,
                 minWidth: `calc(100vw - (100vw - 100%) - ${navBarWidth}px)`,
                 maxWidth: `calc(100vw - (100vw - 100%) - ${navBarWidth}px)`,
@@ -338,7 +339,7 @@ export const App: React.FC = () => (
 
             <Box sx={{ display: 'flex' }}>
                 <OffsetContainerRoot>
-                    <Box sx={{ flexShrink: 0, position: 'relative', height: '100vh' }}>
+                    <Box sx={{ flexShrink: 0, position: 'relative', height: VIEWPORT_HEIGHT }}>
                         <DefaultNavBar />
                     </Box>
                     <Routes>

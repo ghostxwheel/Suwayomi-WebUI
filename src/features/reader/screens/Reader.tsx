@@ -49,6 +49,7 @@ import { getPage } from '@/features/reader/overlay/progress-bar/ReaderProgressBa
 import { getOptionForDirection } from '@/features/theme/services/ThemeCreator.ts';
 import { READING_DIRECTION_TO_THEME_DIRECTION } from '@/features/reader/settings/ReaderSettings.constants.tsx';
 import { useTheme } from '@mui/material/styles';
+import { VIEWPORT_HEIGHT } from '@/base/utils/Viewport.ts';
 
 const BaseReader = ({
     setOverride,
@@ -204,7 +205,7 @@ const BaseReader = ({
                                 top: 0,
                                 left: 0,
                                 width: '100vw',
-                                height: '100vh',
+                                height: VIEWPORT_HEIGHT,
                                 background: 'transparent',
                             }}
                         />
@@ -244,7 +245,7 @@ const BaseReader = ({
         return (
             <Box
                 sx={{
-                    height: '100vh',
+                    height: VIEWPORT_HEIGHT,
                     width: '100vw',
                     display: 'grid',
                     placeItems: 'center',
@@ -272,7 +273,7 @@ const BaseReader = ({
                 minWidth: `calc(100vw - ${readerNavBarWidth}px)`,
                 maxWidth: `calc(100vw - ${readerNavBarWidth}px)`,
                 width: `calc(100vw - ${readerNavBarWidth}px)`,
-                height: `100vh`,
+                height: VIEWPORT_HEIGHT,
                 pt: safeAreaInset.top ? 'env(safe-area-inset-top)' : undefined,
                 pb: safeAreaInset.bottom ? 'env(safe-area-inset-bottom)' : undefined,
                 pr: safeAreaInset.right ? 'env(safe-area-inset-right)' : undefined,
