@@ -24,6 +24,7 @@ import { MANGA_COVER_ASPECT_RATIO } from '@/features/manga/Manga.constants.ts';
 import { GridLayout } from '@/base/Base.types.ts';
 import { MediaQuery } from '@/base/utils/MediaQuery.tsx';
 import { MUIUtil } from '@/lib/mui/MUI.util.ts';
+import { aspectRatioSx } from '@/base/utils/AspectRatio.ts';
 
 const BottomGradient = styled('div')({
     position: 'absolute',
@@ -96,7 +97,7 @@ export const MangaGridCard = memo(
                     <Card
                         sx={{
                             // force standard aspect ratio of manga covers
-                            aspectRatio: MANGA_COVER_ASPECT_RATIO,
+                            ...aspectRatioSx(MANGA_COVER_ASPECT_RATIO),
                             display: 'flex',
                         }}
                     >
