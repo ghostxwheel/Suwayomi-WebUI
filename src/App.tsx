@@ -16,8 +16,6 @@ import Box from '@mui/material/Box';
 import { AwaitableComponent } from 'awaitable-component';
 import { AppContext } from '@/base/contexts/AppContext.tsx';
 import { DefaultNavBar } from '@/features/navigation-bar/components/DefaultNavBar.tsx';
-import { WebUIUpdateChecker } from '@/features/app-updates/components/WebUIUpdateChecker.tsx';
-import { ServerUpdateChecker } from '@/features/app-updates/components/ServerUpdateChecker.tsx';
 import { lazyLoadFallback } from '@/base/utils/LazyLoad.tsx';
 import { ErrorBoundary } from '@/base/components/feedback/ErrorBoundary.tsx';
 import { useNavBarContext } from '@/features/navigation-bar/NavbarContext.tsx';
@@ -334,9 +332,11 @@ export const App: React.FC = () => (
         <CssBaseline enableColorScheme />
 
         <InitializeGuard>
-            <ServerUpdateChecker />
-            <WebUIUpdateChecker />
-
+            {/*
+             * No server/WebUI update checkers (update available/version updated dialogs): the server runs as a
+             * docker image and the WebUI is a custom build (WEB_UI_FLAVOR=CUSTOM), so neither can be updated from
+             * here - the checks only cost requests and renders on every start.
+             */}
             <Box sx={{ display: 'flex' }}>
                 <OffsetContainerRoot>
                     <Box sx={{ flexShrink: 0, position: 'relative', height: VIEWPORT_HEIGHT }}>

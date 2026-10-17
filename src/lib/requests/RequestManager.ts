@@ -74,6 +74,8 @@ import type {
     GetExtensionQueryVariables,
     GetExtensionsFetchMutation,
     GetExtensionsFetchMutationVariables,
+    RefreshExtensionsMutation,
+    RefreshExtensionsMutationVariables,
     GetExtensionsQuery,
     GetExtensionsQueryVariables,
     GetExtensionStoreQuery,
@@ -250,6 +252,7 @@ import { GET_EXTENSION, GET_EXTENSIONS } from '@/lib/graphql/extension/Extension
 import {
     GET_EXTENSIONS_FETCH,
     INSTALL_EXTERNAL_EXTENSION,
+    REFRESH_EXTENSIONS,
     UPDATE_EXTENSION,
     UPDATE_EXTENSIONS,
 } from '@/lib/graphql/extension/ExtensionMutation.ts';
@@ -462,6 +465,8 @@ export type AbortableApolloMutationResponse<Data = any> = {
 } & AbortableRequest;
 
 const EXTENSION_LIST_CACHE_KEY = 'useExtensionListFetch';
+
+const INSTALLED_EXTENSIONS_VARIABLES: GetExtensionsQueryVariables = { condition: { isInstalled: true } };
 
 const CACHE_INITIAL_PAGES_FETCHING_KEY = 'GET_SOURCE_MANGAS_FETCH_FETCHING_INITIAL_PAGES';
 const CACHE_PAGES_KEY = 'GET_SOURCE_MANGAS_FETCH_PAGES';
@@ -1564,6 +1569,29 @@ export class RequestManager {
         options?: QueryHookOptions<GetExtensionsQuery, GetExtensionsQueryVariables>,
     ): AbortableApolloUseQueryResponse<GetExtensionsQuery, GetExtensionsQueryVariables> {
         return this.doRequest(GQLMethod.USE_QUERY, GET_EXTENSIONS, {}, options);
+    }
+
+    public useGetInstalledExtensionList(
+        options?: QueryHookOptions<GetExtensionsQuery, GetExtensionsQueryVariables>,
+    ): AbortableApolloUseQueryResponse<GetExtensionsQuery, GetExtensionsQueryVariables> {
+        return this.useGetExtensionList({ ...options, variables: INSTALLED_EXTENSIONS_VARIABLES });
+    }
+
+    /**
+     * Makes the server refresh its extension list (updates "hasUpdate") and then loads only the installed extensions.
+     *
+     * Fetching the full list instead (~1400 extensions, ~0.7 MB) just to know the number of available updates blocked
+     * the main thread for several seconds on slow devices while apollo wrote it into the cache.
+     */
+    public async refreshInstalledExtensions(): Promise<void> {
+        await this.doRequest<RefreshExtensionsMutation, RefreshExtensionsMutationVariables>(
+            GQLMethod.MUTATION,
+            REFRESH_EXTENSIONS,
+            {},
+        ).response;
+        await this.doRequest(GQLMethod.QUERY, GET_EXTENSIONS, INSTALLED_EXTENSIONS_VARIABLES, {
+            fetchPolicy: 'network-only',
+        }).response;
     }
 
     public getExtensionListFetch(

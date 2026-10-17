@@ -276,7 +276,10 @@ let theme: Theme;
 export const getCurrentTheme = () => theme;
 export const createAndSetTheme = (...args: Parameters<typeof createTheme>) => {
     theme = createTheme(...args);
-    ThemeFontLoader.load(theme).catch(defaultPromiseErrorHandler('theme::createAndSetTheme'));
+    // Not during the render that creates the theme: the font checks run synchronously (document.fonts.check per
+    // font and weight) and noticeably delayed the first render on slow devices.
+    const createdTheme = theme;
+    setTimeout(() => ThemeFontLoader.load(createdTheme).catch(defaultPromiseErrorHandler('theme::createAndSetTheme')));
 
     return theme;
 };

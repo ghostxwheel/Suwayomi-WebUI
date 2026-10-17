@@ -191,7 +191,34 @@ export default defineConfig(({ command }) => ({
             transformIndexHtml() {
                 // Ensure the base tag is placed at the top of the header before any vite injected script
                 // For example, the plugin-legacy injects the modern polyfill script at the top of the header above the base tag, resulting in an invalid url
-                return { tags: [{ tag: 'base', attrs: { href: '/' } }] };
+                return {
+                    tags: [
+                        { tag: 'base', attrs: { href: '/' } },
+                        // Safari 12 (iOS 12) supports module scripts but fails the modern-browser check, so it
+                        // downloaded the modern polyfills + the ~1.3 MB modern entry only to throw a SyntaxError on
+                        // them - and since module scripts run in order, the legacy fallback waited for that download.
+                        // Old WebKit fires "beforeload" before an element loads a resource, which allows cancelling
+                        // those two requests. Only active if optional chaining is a syntax error (= the modern build
+                        // can't run anyway) and "beforeload" exists; everywhere else this is a no-op. Must come
+                        // before the module scripts, so it's injected right after the base tag.
+                        {
+                            tag: 'script',
+                            children: `(function () {
+    try {
+        new Function('a?.b');
+        return;
+    } catch (e) {
+        if (!(e instanceof SyntaxError)) return;
+    }
+    if (!('onbeforeload' in document.createElement('script'))) return;
+    document.addEventListener('beforeload', function (event) {
+        var element = event.target;
+        if (element.tagName === 'SCRIPT' && element.type === 'module' && element.src) event.preventDefault();
+    }, true);
+})();`,
+                        },
+                    ],
+                };
             },
         },
     ],

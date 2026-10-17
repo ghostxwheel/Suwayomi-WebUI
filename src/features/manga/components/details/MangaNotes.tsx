@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -15,36 +15,23 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import { useLingui } from '@lingui/react/macro';
+import { loadable } from 'react-lazily/loadable';
 import { makeToast } from '@/base/utils/Toast.ts';
 import type { MangaIdInfo, MangaMetaInfo } from '@/features/manga/Manga.types.ts';
 import { updateMangaMetadata, useGetMangaMetadata } from '@/features/manga/services/MangaMetadata.ts';
-import { getErrorMessage, markdownToSafeHtml } from '@/lib/HelperFunctions.ts';
-import StarterKit from '@tiptap/starter-kit';
-import {
-    MenuButton,
-    MenuButtonBold,
-    MenuButtonBulletedList,
-    MenuButtonItalic,
-    MenuButtonOrderedList,
-    MenuButtonRedo,
-    MenuButtonUndo,
-    MenuControlsContainer,
-    MenuDivider,
-    MenuSelectHeading,
-    RichTextEditor,
-    type RichTextEditorRef,
-} from 'mui-tiptap';
-import { Markdown } from '@tiptap/markdown';
-import { Placeholder } from '@tiptap/extension-placeholder';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { ClearContentShortcut, SaveContentShortcut } from '@/lib/mui-tiptap/MuiTipTap.shortcut.util.ts';
+import { getErrorMessage } from '@/lib/HelperFunctions.ts';
 import { MarkdownViewer } from '@/lib/mui-tiptap/MarkdownViewer.tsx';
 import Typography from '@mui/material/Typography';
+import { lazyLoadFallback } from '@/base/utils/LazyLoad.tsx';
+
+// tiptap/prosemirror are only needed for editing - loading them with the manga page made up most of its chunk
+const { MangaNotesEditor } = loadable(
+    () => import('@/features/manga/components/details/MangaNotesEditor.tsx'),
+    lazyLoadFallback,
+);
 
 export const MangaNotesButton = ({ manga, notes }: { manga: MangaIdInfo & MangaMetaInfo; notes: string }) => {
     const { t } = useLingui();
-
-    const rteRef = useRef<RichTextEditorRef>(null);
 
     const [isOpen, setIsOpen] = useState(false);
     const [draft, setDraft] = useState(notes);
@@ -78,53 +65,7 @@ export const MangaNotesButton = ({ manga, notes }: { manga: MangaIdInfo & MangaM
             <Dialog open={isOpen} onClose={closeDialog} fullWidth maxWidth="sm">
                 <DialogTitle>{hasNotes ? t`Edit notes` : t`Add notes`}</DialogTitle>
                 <DialogContent>
-                    <RichTextEditor
-                        ref={rteRef}
-                        extensions={[
-                            StarterKit,
-                            Markdown,
-                            Placeholder.configure({
-                                placeholder: t`Add a private note about this manga`,
-                            }),
-                            ClearContentShortcut.extension,
-                            SaveContentShortcut((editor, unchangedContent) => {
-                                if (unchangedContent) {
-                                    setIsOpen(false);
-                                    return true;
-                                }
-
-                                saveNotes(editor.getMarkdown());
-
-                                return true;
-                            }).extension,
-                        ]}
-                        content={markdownToSafeHtml(notes.trim())}
-                        contentType="markdown"
-                        onUpdate={({ editor }) => {
-                            setDraft(editor.getMarkdown());
-                        }}
-                        renderControls={() => (
-                            <MenuControlsContainer>
-                                <MenuButtonUndo />
-                                <MenuButtonRedo />
-                                <MenuDivider />
-                                <MenuSelectHeading />
-                                <MenuDivider />
-                                <MenuButtonBold />
-                                <MenuButtonItalic />
-                                <MenuButtonBulletedList />
-                                <MenuButtonOrderedList />
-                                <MenuDivider />
-                                <MenuButton
-                                    tooltipLabel={t`Clear notes`}
-                                    onClick={() => rteRef.current?.editor?.chain().focus().clearContent().run()}
-                                    tooltipShortcutKeys={ClearContentShortcut.tooltipKeys}
-                                >
-                                    <DeleteIcon color="inherit" />
-                                </MenuButton>
-                            </MenuControlsContainer>
-                        )}
-                    />
+                    <MangaNotesEditor notes={notes} onChange={setDraft} onSave={saveNotes} onClose={closeDialog} />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeDialog}>{t`Cancel`}</Button>

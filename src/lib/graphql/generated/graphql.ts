@@ -1672,6 +1672,15 @@ export type GetExtensionsFetchMutation = {
     } | null;
 };
 
+export type RefreshExtensionsMutationVariables = Exact<{
+    input?: Types.FetchExtensionsInput | null | undefined;
+}>;
+
+export type RefreshExtensionsMutation = {
+    __typename: 'Mutation';
+    fetchExtensions: { __typename: 'FetchExtensionsPayload'; clientMutationId: string | null } | null;
+};
+
 export type UpdateExtensionMutationVariables = Exact<{
     input: Types.UpdateExtensionInput;
 }>;

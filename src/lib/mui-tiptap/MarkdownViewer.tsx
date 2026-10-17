@@ -6,36 +6,40 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import { markdownToSafeHtml } from '@/lib/HelperFunctions.ts';
-import { RichTextReadOnly } from 'mui-tiptap';
-import StarterKit from '@tiptap/starter-kit';
-import { Markdown } from '@tiptap/markdown';
+import { useMemo } from 'react';
+import Box from '@mui/material/Box';
+import { getEditorStyles } from 'mui-tiptap';
+import { markdownToSafeHtml } from '@/lib/Markdown.ts';
 
-export const MarkdownViewer = ({ markdown }: { markdown: string }) => (
-    <RichTextReadOnly
-        key={markdown}
-        extensions={[StarterKit, Markdown]}
-        contentType="markdown"
-        content={markdownToSafeHtml(markdown)}
-        sx={{
-            '& .ProseMirror > p:last-child': {
-                '&:has(br:only-child)': {
-                    display: 'none',
-                },
-            },
+/**
+ * Renders the sanitized html with mui-tiptap's editor content styles.
+ *
+ * This used to be a read-only tiptap editor ("RichTextReadOnly"), which made the manga page load and instantiate the
+ * whole tiptap/prosemirror stack just to display the description and notes - by far the largest part of its chunk,
+ * which is slow to download and parse on old devices.
+ */
+export const MarkdownViewer = ({ markdown }: { markdown: string }) => {
+    const html = useMemo(() => markdownToSafeHtml(markdown), [markdown]);
 
-            '& .ProseMirror': {
+    return (
+        <Box
+            sx={(theme) => ({
+                ...getEditorStyles(theme),
+                overflowWrap: 'break-word',
+
                 display: 'flex',
                 flexDirection: 'column',
                 rowGap: '1rem',
 
                 textAlign: 'justify',
                 textJustify: 'inter-word',
-            },
 
-            '& .ProseMirror > *': {
-                margin: 0,
-            },
-        }}
-    />
-);
+                '& > *': {
+                    margin: 0,
+                },
+            })}
+            // oxlint-disable-next-line react/no-danger -- sanitized by DOMPurify (markdownToSafeHtml)
+            dangerouslySetInnerHTML={{ __html: html }}
+        />
+    );
+};

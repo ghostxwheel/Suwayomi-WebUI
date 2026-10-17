@@ -134,11 +134,6 @@ msgstr "{0} / {1}"
 msgid "{0} / {1}{2}"
 msgstr "{0} / {1}{2}"
 
-#. placeholder {0}: updateStatus.progress
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "{0}% | Updating…"
-msgstr "{0}% | Updating…"
-
 #: src/features/navigation-bar/NavigationBar.constants.ts
 msgid "{availableUpdates, plural, one {# update available} other {# updates available}}"
 msgstr "{availableUpdates, plural, one {# update available} other {# updates available}}"
@@ -405,7 +400,7 @@ msgstr "Active setting ({title})"
 msgid "Add"
 msgstr "Add"
 
-#: src/features/manga/components/details/MangaNotes.tsx
+#: src/features/manga/components/details/MangaNotesEditor.tsx
 msgid "Add a private note about this manga"
 msgstr "Add a private note about this manga"
 
@@ -837,12 +832,6 @@ msgstr "Change categories"
 msgid "Change categories of selected"
 msgstr "Change categories of selected"
 
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
-#: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "Changelog"
-msgstr "Changelog"
-
 #: src/features/settings/screens/Appearance.tsx
 msgid "Changes the theme colors on the manga page based on the thumbnail"
 msgstr "Changes the theme colors on the manga page based on the thumbnail"
@@ -925,7 +914,7 @@ msgstr "Clear cache"
 msgid "Clear cookies and cache"
 msgstr "Clear cookies and cache"
 
-#: src/features/manga/components/details/MangaNotes.tsx
+#: src/features/manga/components/details/MangaNotesEditor.tsx
 msgid "Clear notes"
 msgstr "Clear notes"
 
@@ -951,7 +940,6 @@ msgid "Client data"
 msgstr "Client data"
 
 #: src/base/components/feedback/SnackbarWithDescription.tsx
-#: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
 #: src/features/migration/components/migration-entry/MigrationDestinationEntry.tsx
 msgid "Close"
 msgstr "Close"
@@ -1257,10 +1245,6 @@ msgstr "Could not track manga"
 msgid "Could not untrack manga"
 msgstr "Could not untrack manga"
 
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "Could not update WebUI"
-msgstr "Could not update WebUI"
-
 #: src/features/backup/screens/Backup.tsx
 msgid "Could not validate backup"
 msgstr "Could not validate backup"
@@ -1551,7 +1535,6 @@ msgstr "Double page"
 msgid "Doujinshi"
 msgstr "Doujinshi"
 
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
 #: src/features/chapter/Chapter.constants.ts
 #: src/features/chapter/components/buttons/ChapterDownloadButton.tsx
 #: src/features/chapter/components/ChaptersToolbarMenu.tsx
@@ -2068,10 +2051,6 @@ msgid "If enabled, chooses the match furthest ahead.\n"
 "Otherwise, picks the first match by source priority."
 msgstr "If enabled, chooses the match furthest ahead.\n"
 "Otherwise, picks the first match by source priority."
-
-#: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
-msgid "Ignore"
-msgstr "Ignore"
 
 #: src/features/downloads/screens/DownloadSettings.tsx
 msgid "Ignore automatic chapter downloads for entries with unread chapters"
@@ -2837,8 +2816,6 @@ msgstr "Offset double spreads"
 #: src/base/components/settings/SelectSetting.tsx
 #: src/base/components/settings/text/TextSettingDialog.tsx
 #: src/base/components/settings/TimeSetting.tsx
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
 #: src/features/backup/component/BackupFlagInclusionDialog.tsx
 #: src/features/category/components/CategoriesInclusionSetting.tsx
 #: src/features/category/components/CategorySelect.tsx
@@ -3121,10 +3098,6 @@ msgstr "Recorded hotkeys: {0}"
 msgid "Red"
 msgstr "Red"
 
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "Refresh"
-msgstr "Refresh"
-
 #: src/features/tracker/Tracker.constants.ts
 msgid "Releasing"
 msgstr "Releasing"
@@ -3132,10 +3105,6 @@ msgstr "Releasing"
 #: src/features/manga/components/MangaToolbarMenu.tsx
 msgid "Reload data from source"
 msgstr "Reload data from source"
-
-#: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
-msgid "Remind later"
-msgstr "Remind later"
 
 #: src/base/components/settings/DateSetting.tsx
 #: src/features/manga/hooks/useManageMangaLibraryState.tsx
@@ -3441,17 +3410,6 @@ msgstr "Server settings"
 #: src/features/settings/screens/About.tsx
 msgid "Server version"
 msgstr "Server version"
-
-#. placeholder {0}: selectedServerChannelInfo.tag
-#. placeholder {1}: selectedServerChannelInfo.channel
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
-msgid "Server version {0} ({1}) available for download"
-msgstr "Server version {0} ({1}) available for download"
-
-#. placeholder {0}: aboutServer?.buildType
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
-msgid "Server was updated to version {version} ({0})"
-msgstr "Server was updated to version {version} ({0})"
 
 #: src/features/theme/components/CreateThemeDialog.tsx
 msgid "Set as active theme"
@@ -4132,7 +4090,6 @@ msgstr "Unread chapters"
 msgid "Untracked manga"
 msgstr "Untracked manga"
 
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
 #: src/features/extension/Extensions.constants.ts
 msgid "Update"
 msgstr "Update"
@@ -4142,7 +4099,6 @@ msgid "Update all"
 msgstr "Update all"
 
 #: src/features/app-updates/components/VersionInfo.tsx
-#: src/features/app-updates/components/VersionUpdateInfoDialog.tsx
 msgid "Update available"
 msgstr "Update available"
 
@@ -4173,11 +4129,6 @@ msgstr "Update progress after manually marking as read"
 #: src/features/tracker/screens/TrackingSettings.tsx
 msgid "Update progress after reading"
 msgstr "Update progress after reading"
-
-#: src/features/app-updates/components/ServerUpdateChecker.tsx
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "Updated version"
-msgstr "Updated version"
 
 #: src/features/navigation-bar/NavigationBar.constants.ts
 #: src/features/updates/screens/Updates.tsx
@@ -4284,17 +4235,6 @@ msgstr "WebUI must be kept open. Migration can't be resumed"
 #: src/features/settings/screens/About.tsx
 msgid "WebUI version"
 msgstr "WebUI version"
-
-#. placeholder {0}: webUIUpdateData?.checkForWebUIUpdate.tag
-#. placeholder {1}: webUIUpdateData?.checkForWebUIUpdate.channel
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "WebUI version {0} ({1}) available for download"
-msgstr "WebUI version {0} ({1}) available for download"
-
-#. placeholder {0}: aboutWebUI?.channel
-#: src/features/app-updates/components/WebUIUpdateChecker.tsx
-msgid "WebUI was updated to version {newVersion} ({0})"
-msgstr "WebUI was updated to version {newVersion} ({0})"
 
 #: src/features/settings/screens/ServerSettings.tsx
 msgid "WebView"

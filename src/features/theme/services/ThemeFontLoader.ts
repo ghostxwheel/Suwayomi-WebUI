@@ -6,7 +6,6 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import WebFont from 'webfontloader';
 import type { CssVarsThemeOptions } from '@mui/material/styles';
 import { ControlledPromise } from '@/lib/ControlledPromise.ts';
 import { defaultPromiseErrorHandler } from '@/lib/DefaultPromiseErrorHandler.ts';
@@ -179,6 +178,9 @@ export class ThemeFontLoader {
 
             return `${font}:${weightsArray.join(',')}`;
         });
+
+        // only needed when fonts have to be loaded, no need to have it in the entry chunk
+        const { default: WebFont } = await import('webfontloader');
 
         const loadFontsPromise = new ControlledPromise();
         try {

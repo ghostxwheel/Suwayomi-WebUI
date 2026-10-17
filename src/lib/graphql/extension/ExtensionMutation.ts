@@ -27,6 +27,15 @@ export const GET_EXTENSIONS_FETCH = gql`
     }
 `;
 
+// makes the server fetch the latest extensions without returning them (the full list has ~1400 entries)
+export const REFRESH_EXTENSIONS = gql`
+    mutation REFRESH_EXTENSIONS($input: FetchExtensionsInput = {}) {
+        fetchExtensions(input: $input) {
+            clientMutationId
+        }
+    }
+`;
+
 export const UPDATE_EXTENSION = gql`
     ${EXTENSION_LIST_FIELDS}
 

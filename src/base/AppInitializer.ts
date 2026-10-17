@@ -90,9 +90,9 @@ export class AppInitializer {
 
     private static async fetchBackgroundData(): Promise<void> {
         await AppInitializer.executeActions([
-            // Fetch extension list on startup to show up-to-date number of available extension updates in the navigation bar
+            // Refresh the extension list on startup to show up-to-date number of available extension updates in the navigation bar
             // without having to open the extensions page.
-            ['fetchExtensionList', () => requestManager.getExtensionListFetch().response],
+            ['fetchExtensionList', () => requestManager.refreshInstalledExtensions()],
             /*
              * Creates permanent subscriptions to always have the latest data.
              *
@@ -101,7 +101,6 @@ export class AppInitializer {
              */
             ['downloadSubscription', () => this.subscriptions.push(requestManager.downloadSubscription().subscribe())],
             ['updaterSubscription', () => this.subscriptions.push(requestManager.updaterSubscription().subscribe())],
-            ['webUISubscription', () => this.subscriptions.push(requestManager.webUIUpdateSubscription().subscribe())],
             ['syncSubscription', () => this.subscriptions.push(requestManager.syncSubscription().subscribe())],
         ]);
     }

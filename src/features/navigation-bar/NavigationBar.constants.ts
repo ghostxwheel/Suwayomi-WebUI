@@ -63,7 +63,8 @@ const NAVIGATION_BAR_BASE_ITEMS = [
         show: 'both',
         moreGroup: NavBarItemMoreGroup.GENERAL,
         useBadge: () => {
-            const { data } = requestManager.useGetExtensionList({ fetchPolicy: 'cache-only' });
+            // only installed extensions can have an update (see "RequestManager.refreshInstalledExtensions")
+            const { data } = requestManager.useGetInstalledExtensionList({ fetchPolicy: 'cache-only' });
 
             const extensions = data?.extensions.nodes ?? STABLE_EMPTY_ARRAY;
             const availableUpdates = extensions.filter(
