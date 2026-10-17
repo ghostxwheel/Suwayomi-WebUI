@@ -17,6 +17,8 @@ interface ViteTypeOptions {
 interface ImportMetaEnv {
     readonly VITE_SERVER_URL_DEFAULT: string;
     readonly VITE_SUBPATH?: string;
+    // set by @vitejs/plugin-legacy: true in the legacy chunks (old browsers, e.g. iOS 12), false everywhere else
+    readonly LEGACY: boolean;
     // more env variables...
 }
 

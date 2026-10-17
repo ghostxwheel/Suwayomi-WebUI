@@ -30,6 +30,15 @@ export class ThemeFontLoader {
 
     private static readonly usableFonts: Record<string, Set<number>> = {};
 
+    /**
+     * Fonts are never loaded in the legacy build (old browsers, i.e. old, slow devices like the iOS 12 iPad).
+     *
+     * Every theme change (e.g. on every manga page because of the dynamic color schemes) re-ran the font checks and
+     * requested the fonts again, and the requests never succeeded anyway: Google Fonts answers the combined request
+     * (e.g. "Roboto|Helvetica|Arial", the default theme's fonts) with a 403 when it includes fonts it doesn't have.
+     */
+    private static readonly isDisabled = import.meta.env.LEGACY;
+
     private static async isInstalled(fontName: string, weight: number | string): Promise<boolean> {
         return document.fonts.check(`${weight} 12px "${fontName}"`);
     }
@@ -106,6 +115,10 @@ export class ThemeFontLoader {
     }
 
     static hasMissing(theme: CssVarsThemeOptions): boolean {
+        if (this.isDisabled) {
+            return false;
+        }
+
         const fontWeightsMap = this.extract(theme.typography ?? {});
         const fontNames = Object.keys(fontWeightsMap);
 
@@ -160,6 +173,10 @@ export class ThemeFontLoader {
     }
 
     static async load(theme: CssVarsThemeOptions): Promise<void> {
+        if (this.isDisabled) {
+            return;
+        }
+
         const fontWeightsMap = this.extract(theme.typography ?? {});
 
         const missingFontWeights = await this.detectMissing(fontWeightsMap);

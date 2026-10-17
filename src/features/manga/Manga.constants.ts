@@ -23,6 +23,15 @@ export const GLOBAL_READER_SETTINGS_MANGA: MangaIdInfo & GqlMetaHolder = { id: -
 
 export const MANGA_COVER_ASPECT_RATIO = '1 / 1.5';
 
+/**
+ * The legacy build only runs on old browsers, i.e. old, slow devices (e.g. an iOS 12 iPad), where the manga page's
+ * visual extras were the most expensive part of opening it:
+ * - dynamic color schemes: extracting the palette from the cover on a canvas, and an app-wide re-render with the
+ *   new theme when entering and again when leaving the manga page
+ * - the thumbnail backdrop's live "backdrop-filter" blur, which gets re-rendered on every frame while scrolling
+ */
+export const IS_MANGA_PAGE_LITE_MODE = import.meta.env.LEGACY;
+
 export const MANGA_STATUS_TO_TRANSLATION: Record<MangaStatus, MessageDescriptor> = {
     [MangaStatus.Cancelled]: msg`Cancelled`,
     [MangaStatus.Completed]: msg`Completed`,

@@ -29,7 +29,7 @@ import { useManageMangaLibraryState } from '@/features/manga/hooks/useManageMang
 import { Metadata as BaseMetadata } from '@/base/components/texts/Metadata.tsx';
 import type { MangaType, SourceType } from '@/lib/graphql/generated/graphql-base.types.ts';
 import { useMetadataServerSettings } from '@/features/settings/services/ServerSettingsMetadata.ts';
-import { MANGA_STATUS_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
+import { IS_MANGA_PAGE_LITE_MODE, MANGA_STATUS_TO_TRANSLATION } from '@/features/manga/Manga.constants.ts';
 import type {
     MangaArtistInfo,
     MangaAuthorInfo,
@@ -105,6 +105,8 @@ const TopContentWrapper = ({
                         width: '100%',
                         height: '100%',
                         objectFit: 'cover',
+                        // a filter on the static image only has to be rendered once (see the backdrop filter below)
+                        ...(IS_MANGA_PAGE_LITE_MODE && { filter: 'blur(4.5px) brightness(0.75)' }),
                     }}
                     src={url}
                     alt="Manga Thumbnail"
@@ -121,7 +123,7 @@ const TopContentWrapper = ({
                                 width: '100%',
                                 height: '100%',
                                 background: `linear-gradient(to top, ${theme.palette.background.default}, transparent 100%, transparent 1px),linear-gradient(to right, ${theme.palette.background.default}, transparent 50%, transparent 1px),linear-gradient(to bottom, ${theme.palette.background.default}, transparent 50%, transparent 1px),linear-gradient(to left, ${theme.palette.background.default}, transparent 50%, transparent 1px)`,
-                                backdropFilter: 'blur(4.5px) brightness(0.75)',
+                                ...(!IS_MANGA_PAGE_LITE_MODE && { backdropFilter: 'blur(4.5px) brightness(0.75)' }),
                             }),
                     }}
                 />
@@ -247,7 +249,10 @@ export const MangaDetails = ({
         <DetailsWrapper>
             <TopContentWrapper url={Mangas.getThumbnailUrl(manga)} mangaThumbnailBackdrop={mangaThumbnailBackdrop}>
                 <ThumbnailMetadataWrapper>
-                    <Thumbnail manga={manga} mangaDynamicColorSchemes={mangaDynamicColorSchemes} />
+                    <Thumbnail
+                        manga={manga}
+                        mangaDynamicColorSchemes={mangaDynamicColorSchemes && !IS_MANGA_PAGE_LITE_MODE}
+                    />
                     <MetadataContainer>
                         <Stack sx={{ flexDirection: 'row', gap: 1, alignItems: 'flex-start', mb: 1 }}>
                             <SearchLink query={manga.title} sourceId={manga.sourceId} mode="source.global-search">

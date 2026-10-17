@@ -24,6 +24,7 @@ import { useLingui } from '@lingui/react/macro';
 import { CustomTooltip } from '@/base/components/CustomTooltip.tsx';
 import { CategorySelect } from '@/features/category/components/CategorySelect.tsx';
 import { useMetadataServerSettings } from '@/features/settings/services/ServerSettingsMetadata.ts';
+import { IS_MANGA_PAGE_LITE_MODE } from '@/features/manga/Manga.constants.ts';
 import { ThemeCreationDialog } from '@/features/theme/components/CreateThemeDialog.tsx';
 import type {
     MangaIdInfo,
@@ -49,6 +50,7 @@ export const MangaToolbarMenu = ({ manga, onRefresh, refreshing }: IProps) => {
     const theme = useTheme();
     const isLargeScreen = useMediaQuery(theme.breakpoints.up('sm'));
     const { settings } = useMetadataServerSettings();
+    const areDynamicColorSchemesEnabled = settings.mangaDynamicColorSchemes && !IS_MANGA_PAGE_LITE_MODE;
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -82,7 +84,7 @@ export const MangaToolbarMenu = ({ manga, onRefresh, refreshing }: IProps) => {
                             <Refresh />
                         </IconButton>
                     </CustomTooltip>
-                    {settings.mangaDynamicColorSchemes && (
+                    {areDynamicColorSchemesEnabled && (
                         <CustomTooltip title={t`Save dynamic color theme`}>
                             <IconButton onClick={saveDynamicColorTheme} color="inherit">
                                 <ColorLensIcon />
@@ -170,7 +172,7 @@ export const MangaToolbarMenu = ({ manga, onRefresh, refreshing }: IProps) => {
                             </ListItemIcon>
                             <ListItemText>{t`Reload data from source`}</ListItemText>
                         </MenuItem>
-                        {settings.mangaDynamicColorSchemes && (
+                        {areDynamicColorSchemesEnabled && (
                             <MenuItem onClick={saveDynamicColorTheme}>
                                 <ListItemIcon>
                                     <ColorLensIcon fontSize="small" />
