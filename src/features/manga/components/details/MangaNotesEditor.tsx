@@ -29,7 +29,6 @@ import {
 import { Markdown } from '@tiptap/markdown';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { markdownToSafeHtml } from '@/lib/Markdown.ts';
 import { ClearContentShortcut, SaveContentShortcut } from '@/lib/mui-tiptap/MuiTipTap.shortcut.util.ts';
 
 export const MangaNotesEditor = ({
@@ -68,7 +67,7 @@ export const MangaNotesEditor = ({
                     return true;
                 }).extension,
             ]}
-            content={markdownToSafeHtml(notes.trim())}
+            content={notes.trim()}
             contentType="markdown"
             onUpdate={({ editor }) => {
                 onChange(editor.getMarkdown());

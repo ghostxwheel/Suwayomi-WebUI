@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+// Only used by "MarkdownViewer", which renders the html directly instead of a read-only tiptap editor (upstream).
 // Kept out of "HelperFunctions.ts" on purpose: that file is imported almost everywhere, which put "marked" and
-// "dompurify" (~110 KB, incl. marked's regex setup on load) into the entry chunk although only the manga notes and
-// the markdown viewer need them.
+// "dompurify" (~110 KB, incl. marked's regex setup on load) into the entry chunk.
 
 import DOMPurify from 'dompurify';
 import { marked } from 'marked';
@@ -16,8 +16,10 @@ import { marked } from 'marked';
 export const markdownToSafeHtml = (markdown: string): string => {
     const html = marked.parse(markdown, {
         async: false,
+        // the tiptap editor keeps single line breaks as well (notes are edited with it)
         breaks: true,
-        gfm: false,
+        // same as tiptap's markdown parsing (marked's defaults), e.g. "~~strike~~" written in the notes editor
+        gfm: true,
     });
 
     return DOMPurify.sanitize(html, {
